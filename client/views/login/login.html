@@ -1,0 +1,27 @@
+<template name="login">
+  <div class="login accounts-view">
+
+    <form action="#" id="login-form">
+      <h2>Log In</h2>
+
+      <div class="accounts-email">
+        <input type="email" id="accounts-email" placeholder="email" autofocus>
+      </div>
+
+      <div class="accounts-password">
+        <input type="password" id="accounts-password" placeholder="password">
+      </div>
+
+      <div class="submit">
+        <input class="login-btn" type="submit" value="login">
+      </div>
+
+    </form>
+
+    <div class="other-links">
+        <span class="registration"><a href={{pathFor 'registration'}}>Register</a></span>
+        <span class="forgot-password"><a href="#">Forgot Password?</a></span>
+    </div>
+
+  </div>
+</template>
