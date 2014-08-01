@@ -1,2 +1,2 @@
 Router.map ->
-  @route 'login', { path: '/' }
+  @route 'login'

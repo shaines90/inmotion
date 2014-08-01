@@ -2,6 +2,7 @@
   "packages": {
     "iron-router": {},
     "font-awesome-4-less": {},
-    "foundation": {}
+    "foundation": {},
+    "bootstrap3-less": {}
   }
 }
