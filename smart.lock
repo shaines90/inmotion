@@ -3,7 +3,8 @@
   "dependencies": {
     "basePackages": {
       "iron-router": {},
-      "font-awesome-4-less": {}
+      "font-awesome-4-less": {},
+      "foundation": {}
     },
     "packages": {
       "iron-router": {
@@ -15,6 +16,11 @@
         "git": "https://github.com/svub/fontawesome4-less.git",
         "tag": "v4.4.0",
         "commit": "250d2336a217c18eb70e9d074784a7db3ca38472"
+      },
+      "foundation": {
+        "git": "https://github.com/ewall/meteor-foundation.git",
+        "tag": "v5.3.1",
+        "commit": "fcf10ccc5286dac293b5fa57980593eea6441d41"
       },
       "iron-layout": {
         "git": "https://github.com/EventedMind/iron-layout.git",
