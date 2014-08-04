@@ -1,27 +1,26 @@
 <template name="login">
-  <div class="login accounts-view">
 
-    <form action="#" id="login-form">
-      <h2>Log In</h2>
+  <div class="container">
 
-      <div class="accounts-email">
-        <input type="email" id="accounts-email" placeholder="email" autofocus>
+    <form class="form-signin" role="form">
+      <h2 class="form-signin-heading">Please sign in</h2>
+
+      <input type="email" class="form-control" placeholder="Email address" required="" autofocus="">
+
+      <input type="password" class="form-control" placeholder="Password" required="">
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
       </div>
 
-      <div class="accounts-password">
-        <input type="password" id="accounts-password" placeholder="password">
-      </div>
-
-      <div class="submit">
-        <input class="login-btn" type="submit" value="login">
-      </div>
-
+      <button class="btn btn-lg btn-block" type="submit">Sign in</button>
     </form>
 
-    <div class="other-links">
-        <span class="registration"><a href={{pathFor 'registration'}}>Register</a></span>
-        <span class="forgot-password"><a href={{pathFor 'forgotPassword'}}>Forgot Password?</a></span>
-    </div>
+  </div> <!-- /container -->
 
-  </div>
 </template>
+
+
+

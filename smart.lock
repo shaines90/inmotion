@@ -20,8 +20,8 @@
       },
       "foundation": {
         "git": "https://github.com/ewall/meteor-foundation.git",
-        "tag": "v5.3.1",
-        "commit": "fcf10ccc5286dac293b5fa57980593eea6441d41"
+        "tag": "v5.3.3",
+        "commit": "0a879addbc52205631baf8c92340006a9b732ad3"
       },
       "bootstrap3-less": {
         "git": "https://github.com/simison/bootstrap3-less",
