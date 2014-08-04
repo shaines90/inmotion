@@ -4,7 +4,6 @@
     "basePackages": {
       "iron-router": {},
       "font-awesome-4-less": {},
-      "foundation": {},
       "bootstrap3-less": {}
     },
     "packages": {
@@ -17,11 +16,6 @@
         "git": "https://github.com/svub/fontawesome4-less.git",
         "tag": "v4.4.0",
         "commit": "250d2336a217c18eb70e9d074784a7db3ca38472"
-      },
-      "foundation": {
-        "git": "https://github.com/ewall/meteor-foundation.git",
-        "tag": "v5.3.3",
-        "commit": "0a879addbc52205631baf8c92340006a9b732ad3"
       },
       "bootstrap3-less": {
         "git": "https://github.com/simison/bootstrap3-less",
