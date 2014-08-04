@@ -8,3 +8,7 @@ autopublish
 insecure
 accounts-base
 accounts-password
+iron-router
+coffeescript
+less
+email
