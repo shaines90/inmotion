@@ -6,7 +6,8 @@
       "font-awesome-4-less": {},
       "bootstrap3-less": {},
       "googlemaps": {},
-      "accounts-entry": {}
+      "accounts-entry": {},
+      "profile": {}
     },
     "packages": {
       "iron-router": {
@@ -33,6 +34,11 @@
         "git": "https://github.com/Differential/accounts-entry.git",
         "tag": "v0.8.0",
         "commit": "cf7f7d0ecc285824bc2748e305f5d693df99b4ae"
+      },
+      "profile": {
+        "git": "https://github.com/Differential/meteor-profile.git",
+        "tag": "v0.0.10",
+        "commit": "2540cdc76cf5c5fdf6ee0fd0cff1e37c4b1ba519"
       },
       "iron-layout": {
         "git": "https://github.com/EventedMind/iron-layout.git",
