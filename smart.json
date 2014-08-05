@@ -3,6 +3,7 @@
     "iron-router": {},
     "font-awesome-4-less": {},
     "bootstrap3-less": {},
-    "googlemaps": {}
+    "googlemaps": {},
+    "accounts-entry": {}
   }
 }
