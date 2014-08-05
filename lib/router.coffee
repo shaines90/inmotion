@@ -4,7 +4,7 @@ Router.configure
 Router.map ->
   @route 'main',
     path: '/'
-    layoutTemplate: 'map_layout'
+    layoutTemplate: 'home_layout'
   @route 'map'
   @route 'login'
   @route 'registration'
