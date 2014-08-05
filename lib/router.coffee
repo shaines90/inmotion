@@ -73,16 +73,17 @@ Router.map ->
 
   @route 'map'
   @route 'profile'
+  @route 'contact'
 
 autoLogin = (pause) ->
   Router.go 'map' if Meteor.userId()
 
 requireLogin = (pause) ->
   unless Meteor.userId()
-    Router.go 'login'
+    Router.go 'entrySignIn'
 
 Router.onBeforeAction autoLogin,
-  only: ['login', 'registration']
+  only: ['main', 'entrySignIn', 'entrySignUp']
 
 Router.onBeforeAction requireLogin,
   only: ['map', 'profile']
