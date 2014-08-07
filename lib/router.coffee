@@ -86,6 +86,6 @@ Router.onBeforeAction autoLogin,
   only: ['main', 'entrySignIn', 'entrySignUp']
 
 Router.onBeforeAction requireLogin,
-  only: ['map', 'profile']
+  only: ['map', 'profile', 'contact']
 
 
