@@ -1,14 +1,10 @@
-Images = new FS.Collection("images",
-  stores: [new FS.Store.FileSystem("images",
-    path: "~/uploads"
-  )]
-)
-
-Template.hello.events "dropped #dropzone": (event, temp) ->
-  console.log "files dropped"
+Template.profile.events "dropped #dropzone": (event, temp) ->
   FS.Utility.eachFile event, (file) ->
-    Images.insert file, (err, fileObj) ->
-
+    newFile = new FS.File(file)
+    if !!Images.find().fetch()[0] == false
+      Images.insert file, (err, fileObj) ->
+    else
+      Images.find().fetch()[0].remove()
+      Images.insert file, (err, fileObj) ->
     return
-
   return

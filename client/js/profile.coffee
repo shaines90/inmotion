@@ -15,6 +15,10 @@ Template.profile.helpers
   googlePlusUrl: -> Meteor.user().profile.googlePlusUrl if Meteor.user()
   twitterHandle: -> Meteor.user().profile.twitterHandle if Meteor.user()
 
+Template.userCard.helpers
+  profileImage:  -> Images.find().fetch()[0].url()
+
+
 Template.profile.events
   'click .done': ->
     if Meteor.user().profile.firstName
