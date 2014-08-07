@@ -20,3 +20,5 @@ accounts-facebook
 collectionFS
 cfs-gridfs
 Dropzonejs
+cfs-filesystem
+profile
