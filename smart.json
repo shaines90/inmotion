@@ -5,6 +5,7 @@
     "bootstrap3-less": {},
     "googlemaps": {},
     "accounts-entry": {},
-    "collectionFS": {}
+    "collectionFS": {},
+    "Dropzonejs": {}
   }
 }
