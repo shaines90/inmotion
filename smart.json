@@ -5,6 +5,10 @@
     "bootstrap3-less": {},
     "googlemaps": {},
     "accounts-entry": {},
+
     "profile": {}
+    "collectionFS": {},
+    "Dropzonejs": {},
+    "ui-dropped-event": {}
   }
 }
