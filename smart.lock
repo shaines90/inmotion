@@ -100,8 +100,8 @@
       },
       "cfs-worker": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-worker.git",
-        "tag": "v0.0.16",
-        "commit": "172abbf679a9c9ce65d5cac7b51f23967aff94f7"
+        "tag": "v0.0.17",
+        "commit": "654fa7c552f558a293429da790b016af6f1c4fc3"
       },
       "cfs-upload-http": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-upload-http.git",

@@ -103,7 +103,6 @@ pinMarker = ->
           lastClickIsApin = true
           pinInfowindow.open map, pinMarkermarker
 
-
 autorunPinOnMap = ->
   if (Meteor.isClient)
     Deps.autorun () ->
@@ -142,7 +141,6 @@ autorunPinOnMap = ->
               infowindow.open map, this
               console.log 'one new pin from DB has been made'
 
-
 geoLocation = ->
   if navigator.geolocation
     navigator.geolocation.getCurrentPosition ((position) ->
@@ -154,6 +152,11 @@ geoLocation = ->
         position: pos,
         icon: yellowMarker
         zoom: 13
+      lastClickedInfowindow = currentPosInfowindow
+      lastClickedMarker = currentPosMarker
+      lastClickIsApin = false
+      console.log "this is here"
+      console.log pos
       google.maps.event.addListener currentPosMarker, "click", ->
         if lastClickedInfowindow == "No click yet"
           lastClickedInfowindow = currentPosInfowindow
@@ -179,7 +182,6 @@ geoLocation = ->
       handleNoGeolocation true
   else
     handleNoGeolocation false
-
 
 handleNoGeolocation = (errorFlag) ->
   if errorFlag

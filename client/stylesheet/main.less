@@ -21,11 +21,13 @@ a {
 
 .navbar {
   background-color: #094258;
+  color: white;
 }
 
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
   background-color: #84BB0F;
   border: 1px solid #094258;
+  color: white;
 }
 
 .navbar-brand {
@@ -33,13 +35,22 @@ a {
   padding-top: 0;
 }
 
-.nav-user {
-  margin-right: 10px;
+.nav-url {
+  color: white !important;
 }
 
-.nav-right {
+.navbar-nav > li {
+  float: none;
+}
+
+.nav-user {
   margin-right: 10px;
-  vertical-align: middle;
+  line-height: 3.428571;
+  float: right !important;
+}
+
+.nav-select {
+  float: left !important;
 }
 
 #login-buttons .login-button:hover, .accounts-dialog .login-button:hover {
