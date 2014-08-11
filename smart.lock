@@ -7,11 +7,10 @@
       "bootstrap3-less": {},
       "googlemaps": {},
       "accounts-entry": {},
-      "profile": {}
+      "profile": {},
       "collectionFS": {},
       "Dropzonejs": {},
       "ui-dropped-event": {}
-image-uploader
     },
     "packages": {
       "iron-router": {
@@ -39,12 +38,11 @@ image-uploader
         "tag": "v0.8.0",
         "commit": "cf7f7d0ecc285824bc2748e305f5d693df99b4ae"
       },
-<<<<<<< HEAD
       "profile": {
         "git": "https://github.com/Differential/meteor-profile.git",
         "tag": "v0.0.10",
         "commit": "2540cdc76cf5c5fdf6ee0fd0cff1e37c4b1ba519"
-=======
+      },
       "collectionFS": {
         "git": "https://github.com/CollectionFS/Meteor-CollectionFS.git",
         "tag": "v0.4.8",
@@ -59,7 +57,6 @@ image-uploader
         "git": "https://github.com/CollectionFS/Meteor-ui-dropped-event.git",
         "tag": "v0.0.7",
         "commit": "cea1b4dff66044398586dbc43861e6c491672f53"
->>>>>>> image-uploader
       },
       "iron-layout": {
         "git": "https://github.com/EventedMind/iron-layout.git",

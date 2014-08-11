@@ -1,9 +1,3 @@
-Template.profile.rendered = ->
-  $('#bio').keydown( (event) ->
-    if event.keyCode == 13
-      $('#bio').blur()
-  )
-
 Template.profile.helpers
   email:         -> Meteor.user().emails[0].address if Meteor.user() and Meteor.user().emails?
   firstName:     -> Meteor.user().profile.firstName if Meteor.user()
@@ -16,8 +10,10 @@ Template.profile.helpers
   twitterHandle: -> Meteor.user().profile.twitterHandle if Meteor.user()
 
 Template.userCard.helpers
-  profileImage:  -> Images.find().fetch()[0].url()
-
+  profileImage:  ->
+    if Meteor.user()
+      imageId = Meteor.user().profile.imageId
+      profileImageUrl = Images.findOne(imageId).url()
 
 Template.profile.events
   'click .done': ->

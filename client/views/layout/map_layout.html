@@ -2,4 +2,19 @@
   {{> navbar }}
   <div id="map-canvas">
   </div>
+  <div id="panel">
+    <h2>Find Location</h2>
+    <input class="input-field" id="address" type="textbox">
+    <button type="button" class="btn" id="address">Find</button>
+  {{> editMarker}}
+  </div>
+</template>
+
+
+<template name="editMarker">
+  <div>
+    <div class="edit-marker">
+      <button class="btn" id="createMarker">Create Pin</button>
+    </div>
+  </div>
 </template>

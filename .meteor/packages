@@ -4,7 +4,6 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-autopublish
 insecure
 accounts-base
 accounts-password
@@ -24,4 +23,3 @@ Dropzonejs
 cfs-filesystem
 profile
 ui-dropped-event
-
