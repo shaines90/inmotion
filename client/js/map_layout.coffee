@@ -47,7 +47,7 @@ pinMarker = ->
     $("button#createMarker").data("lat", latt)
     $("button#createMarker").data("long", long)
     console.log $("button#createMarker").data("lat")
-    contentString = "<div id=\"content\">" + "<div id=\"siteNotice\">" + "</div>" + "<h1 id=\"firstHeading\" class=\"firstHeading\">Uluru</h1>" + "<div id=\"bodyContent\">" + "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " + "sandstone rock formation in the southern part of the " + "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " + "south west of the nearest large town, Alice Springs; 450&#160;km " + "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " + "features of the Uluru - Kata Tjuta National Park. Uluru is " + "sacred to the Pitjantjatjara and Yankunytjatjara, the " + "Aboriginal people of the area. It has many springs, waterholes, " + "rock caves and ancient paintings. Uluru is listed as a World " + "Heritage Site.</p>" + "<p>Attribution: Uluru, <a href=\"http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194\">" + "http://en.wikipedia.org/w/index.php?title=Uluru</a> " + "(last visited June 22, 2009).</p>" + "</div>" + "</div>"
+    contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     pinInfowindow = new google.maps.InfoWindow(content: contentString)
     pinMarkermarker = new google.maps.Marker(
       position:
@@ -106,79 +106,79 @@ pinMarker = ->
 
 autorunPinOnMap = ->
   if (Meteor.isClient)
-      Deps.autorun () ->
-        array = Markers.find().fetch()
-        console.log array.length
-        for key, object of array
-          console.log key
-          latt = object.lat
-          long = object.lng
-          contentString = "<div id=\"content\">" + "<div id=\"siteNotice\">" + "</div>" + "<h1 id=\"firstHeading\" class=\"firstHeading\">Uluru</h1>" + "<div id=\"bodyContent\">" + "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " + "sandstone rock formation in the southern part of the " + "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " + "south west of the nearest large town, Alice Springs; 450&#160;km " + "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " + "features of the Uluru - Kata Tjuta National Park. Uluru is " + "sacred to the Pitjantjatjara and Yankunytjatjara, the " + "Aboriginal people of the area. It has many springs, waterholes, " + "rock caves and ancient paintings. Uluru is listed as a World " + "Heritage Site.</p>" + "<p>Attribution: Uluru, <a href=\"http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194\">" + "http://en.wikipedia.org/w/index.php?title=Uluru</a> " + "(last visited June 22, 2009).</p>" + "</div>" + "</div>"
-          infowindow = new google.maps.InfoWindow(content: contentString)
-          marker = new google.maps.Marker
-            position:
-              lat: latt,
-              lng: long,
-            map: map,
-            draggable:true,
-          google.maps.event.addListener marker, "click", ->
-            if lastClickIsApin is true
-              lastClickedMarker.setMap(null)
+    Deps.autorun () ->
+      array = Markers.find().fetch()
+      console.log array.length
+      for key, object of array
+        console.log key
+        latt = object.lat
+        long = object.lng
+        contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+        infowindow = new google.maps.InfoWindow(content: contentString)
+        marker = new google.maps.Marker
+          position:
+            lat: latt,
+            lng: long,
+          map: map,
+          draggable:true,
+        google.maps.event.addListener marker, "click", ->
+          if lastClickIsApin is true
+            lastClickedMarker.setMap(null)
+            lastClickedMarker = this
+            lastClickedInfowindow = infowindow
+            lastClickIsApin = false
+            infowindow.open map, this
+          else
+            if lastClickedInfowindow == "No click yet"
               lastClickedMarker = this
               lastClickedInfowindow = infowindow
               lastClickIsApin = false
               infowindow.open map, this
             else
-              if lastClickedInfowindow == "No click yet"
-                lastClickedMarker = this
-                lastClickedInfowindow = infowindow
-                lastClickIsApin = false
-                infowindow.open map, this
-              else
-                lastClickedInfowindow.close map, lastClickedMarker
-                lastClickedMarker = this
-                lastClickedInfowindow = infowindow
-                lastClickIsApin = false
-                infowindow.open map, this
-                console.log 'one new pin from DB has been made'
+              lastClickedInfowindow.close map, lastClickedMarker
+              lastClickedMarker = this
+              lastClickedInfowindow = infowindow
+              lastClickIsApin = false
+              infowindow.open map, this
+              console.log 'one new pin from DB has been made'
 
 
 geoLocation = ->
   if navigator.geolocation
-      navigator.geolocation.getCurrentPosition ((position) ->
-        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-        contentString = "<div id=\"content\">" + "<div id=\"siteNotice\">" + "</div>" + "<h1 id=\"firstHeading\" class=\"firstHeading\">Uluru</h1>" + "<div id=\"bodyContent\">" + "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " + "sandstone rock formation in the southern part of the " + "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " + "south west of the nearest large town, Alice Springs; 450&#160;km " + "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " + "features of the Uluru - Kata Tjuta National Park. Uluru is " + "sacred to the Pitjantjatjara and Yankunytjatjara, the " + "Aboriginal people of the area. It has many springs, waterholes, " + "rock caves and ancient paintings. Uluru is listed as a World " + "Heritage Site.</p>" + "<p>Attribution: Uluru, <a href=\"http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194\">" + "http://en.wikipedia.org/w/index.php?title=Uluru</a> " + "(last visited June 22, 2009).</p>" + "</div>" + "</div>"
-        currentPosInfowindow = new google.maps.InfoWindow(content: contentString)
-        currentPosMarker = new google.maps.Marker
-          map: map,
-          position: pos,
-          icon: yellowMarker
-          zoom: 13
-        google.maps.event.addListener currentPosMarker, "click", ->
-          if lastClickedInfowindow == "No click yet"
+    navigator.geolocation.getCurrentPosition ((position) ->
+      pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+      contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+      currentPosInfowindow = new google.maps.InfoWindow(content: contentString)
+      currentPosMarker = new google.maps.Marker
+        map: map,
+        position: pos,
+        icon: yellowMarker
+        zoom: 13
+      google.maps.event.addListener currentPosMarker, "click", ->
+        if lastClickedInfowindow == "No click yet"
+          lastClickedInfowindow = currentPosInfowindow
+          lastClickedMarker = currentPosMarker
+          lastClickIsApin = false
+          currentPosInfowindow.open map, currentPosMarker
+        else
+          if lastClickIsApin is true
+            lastClickedMarker.setMap(null)
             lastClickedInfowindow = currentPosInfowindow
             lastClickedMarker = currentPosMarker
             lastClickIsApin = false
             currentPosInfowindow.open map, currentPosMarker
           else
-            if lastClickIsApin is true
-              lastClickedMarker.setMap(null)
-              lastClickedInfowindow = currentPosInfowindow
-              lastClickedMarker = currentPosMarker
-              lastClickIsApin = false
-              currentPosInfowindow.open map, currentPosMarker
-            else
-              lastClickedInfowindow.close map, lastClickedMarker
-              lastClickedInfowindow = currentPosInfowindow
-              lastClickedMarker = currentPosMarker
-              lastClickIsApin = false
-              currentPosInfowindow.open map, currentPosMarker
-              return
+            lastClickedInfowindow.close map, lastClickedMarker
+            lastClickedInfowindow = currentPosInfowindow
+            lastClickedMarker = currentPosMarker
+            lastClickIsApin = false
+            currentPosInfowindow.open map, currentPosMarker
+            return
 
-        map.setCenter pos), ->
-        handleNoGeolocation true
-    else
-      handleNoGeolocation false
+      map.setCenter pos), ->
+      handleNoGeolocation true
+  else
+    handleNoGeolocation false
 
 
 handleNoGeolocation = (errorFlag) ->
@@ -204,7 +204,7 @@ insertMarkersInDb =  ->
 insertMarkersInDb()
 
 markerObjectForm =  (latData, longData) ->
-      {lat: latData, lng: longData}
+  {lat: latData, lng: longData}
 
 findOnMap = ->
   Template.map.events
@@ -215,7 +215,7 @@ findOnMap = ->
       , (results, status) ->
         if status is google.maps.GeocoderStatus.OK
           map.setCenter results[0].geometry.location
-          contentString = "<div id=\"content\">" + "<div id=\"siteNotice\">" + "</div>" + "<h1 id=\"firstHeading\" class=\"firstHeading\">Uluru</h1>" + "<div id=\"bodyContent\">" + "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " + "sandstone rock formation in the southern part of the " + "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " + "south west of the nearest large town, Alice Springs; 450&#160;km " + "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " + "features of the Uluru - Kata Tjuta National Park. Uluru is " + "sacred to the Pitjantjatjara and Yankunytjatjara, the " + "Aboriginal people of the area. It has many springs, waterholes, " + "rock caves and ancient paintings. Uluru is listed as a World " + "Heritage Site.</p>" + "<p>Attribution: Uluru, <a href=\"http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194\">" + "http://en.wikipedia.org/w/index.php?title=Uluru</a> " + "(last visited June 22, 2009).</p>" + "</div>" + "</div>"
+          contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
           currentFindInfowindow = new google.maps.InfoWindow(content: contentString)
           currentFindMarker = new google.maps.Marker(
             map: map
