@@ -1,3 +1,4 @@
+
 Meteor.subscribe('markers')
 map = undefined
 codeAddress = undefined
@@ -11,18 +12,19 @@ currentFindInfowindow = undefined
 # array = undefined
 marker = undefined
 
-
 lastClickedMarker = "No click yet"
 lastClickedInfowindow = "No click yet"
 lastClickIsApin = undefined
 pinInfowindow = undefined
 pinMarkermarker = undefined
 
+infoWindowContent = (infoWindow, contentString) ->
+  infoWindow.setContent(contentString)
+
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initialize);
   initialize()
   geoLocation()
-
 
 initialize = ->
   geocoder = new google.maps.Geocoder()
@@ -38,6 +40,7 @@ initialize = ->
 
 pinMarker = ->
   google.maps.event.addListener map, "click", (event) ->
+    debugger
 
     console.log latt = event.latLng.lat()
     console.log long = event.latLng.lng()
@@ -49,6 +52,7 @@ pinMarker = ->
     console.log $("button#createMarker").data("lat")
     contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     pinInfowindow = new google.maps.InfoWindow(content: contentString)
+    infoWindowContent(pinInfowindow, contentString)
     pinMarkermarker = new google.maps.Marker(
       position:
         lat: latt,
@@ -83,6 +87,7 @@ pinMarker = ->
         pinInfowindow.open map, pinMarkermarker
 
     google.maps.event.addListener pinMarkermarker, "click", ->
+      debugger
       if lastClickedInfowindow == "No click yet"
         lastClickedInfowindow = pinInfowindow
         lastClickedMarker = pinMarkermarker
@@ -104,6 +109,7 @@ pinMarker = ->
           pinInfowindow.open map, pinMarkermarker
 
 autorunPinOnMap = ->
+  debugger
   if (Meteor.isClient)
     Deps.autorun () ->
       array = Markers.find().fetch()
@@ -114,6 +120,7 @@ autorunPinOnMap = ->
         long = object.lng
         contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
         infowindow = new google.maps.InfoWindow(content: contentString)
+        infoWindowContent(pinInfowindow, contentString)
         marker = new google.maps.Marker
           position:
             lat: latt,
@@ -121,6 +128,7 @@ autorunPinOnMap = ->
           map: map,
           draggable:true,
         google.maps.event.addListener marker, "click", ->
+          debugger
           if lastClickIsApin is true
             lastClickedMarker.setMap(null)
             lastClickedMarker = this
@@ -142,6 +150,7 @@ autorunPinOnMap = ->
               console.log 'one new pin from DB has been made'
 
 geoLocation = ->
+  debugger
   if navigator.geolocation
     navigator.geolocation.getCurrentPosition ((position) ->
       pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
@@ -158,6 +167,7 @@ geoLocation = ->
       console.log "this is here"
       console.log pos
       google.maps.event.addListener currentPosMarker, "click", ->
+        debugger
         if lastClickedInfowindow == "No click yet"
           lastClickedInfowindow = currentPosInfowindow
           lastClickedMarker = currentPosMarker
@@ -184,6 +194,7 @@ geoLocation = ->
     handleNoGeolocation false
 
 handleNoGeolocation = (errorFlag) ->
+  debugger
   if errorFlag
     content = "Error: The Geolocation service failed."
   else
@@ -226,6 +237,7 @@ findOnMap = ->
           )
 
           google.maps.event.addListener currentFindMarker, "click", ->
+            debugger
             console.log currentFindInfowindow
             console.log currentFindMarker
             if lastClickedInfowindow == "No click yet"
@@ -249,10 +261,9 @@ findOnMap = ->
         else
           alert "Geocode was not successful for the following reason: " + status
         return
+
       return
       e.preventDefault()
       false
 findOnMap()
-
-
 
