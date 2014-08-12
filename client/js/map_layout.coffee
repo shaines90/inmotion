@@ -228,7 +228,7 @@ findOnMap = ->
       , (results, status) ->
         if status is google.maps.GeocoderStatus.OK
           map.setCenter results[0].geometry.location
-          contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+          contentString = "<div id=\"content\">" + $('#content_sourceShow').html() +  "</div>"
           currentFindInfowindow = new google.maps.InfoWindow(content: contentString)
           currentFindMarker = new google.maps.Marker(
             map: map
@@ -266,4 +266,10 @@ findOnMap = ->
       e.preventDefault()
       false
 findOnMap()
+
+# Template.infoWindow.helpers
+#   locationImage:  ->
+#     if Meteor.user()
+#       locationImages = Meteor.user().profile.locationImages
+#       locationImageUrl = Images.findOne(locationImages).url()
 

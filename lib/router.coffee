@@ -71,7 +71,8 @@ Router.map ->
   @route 'registration'
   @route 'forgotPassword'
 
-  @route 'map'
+  @route 'map',
+    waitOn: -> Meteor.subscribe "contents"
   @route 'profile'
   @route 'contact'
 
