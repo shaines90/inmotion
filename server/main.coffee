@@ -3,3 +3,6 @@ Meteor.publish "markers", ->
 
 Meteor.publish "picture", ->
   Images.find({})
+
+Meteor.publish "contents", (options) ->
+  Content.find({})

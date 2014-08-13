@@ -61,12 +61,6 @@ Router.map ->
         Template[@template].events(AccountsEntry.entrySignUpEvents)
         Template[@template].helpers(AccountsEntry.entrySignUpHelpers)
 
-
-
-
-
-
-
   @route 'login'
   @route 'registration'
   @route 'forgotPassword'
