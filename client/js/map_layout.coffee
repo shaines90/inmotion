@@ -11,8 +11,10 @@ Template.map.rendered = ->
 initializeMap = ->
   # geocoder = new google.maps.Geocoder()
   mapOptions =
+    backgroundColor: "#AFBE48"
     zoom: 8
     center: new google.maps.LatLng(-34.397, 150.644)
+    minZoom: 2
 
   mapDiv = document.getElementById("map-canvas")
   map = new google.maps.Map(mapDiv, mapOptions)
@@ -35,17 +37,16 @@ mapClick = ->
     infoWindowContent(mapClickInfoWindow, contentString)
 
     console.log "hidden: " + $("button#saveMarker").data("lat")
+    mapClickedMarker.setMap null if mapClickedMarker
     mapClickedMarker = new google.maps.Marker(
       position:
         lat: latt,
         lng: long,
       map: map,
-      draggable:true
-      )
+      draggable: false)
 
     google.maps.event.addListener mapClickedMarker, "click", ->
       mapClickInfoWindow.open map, mapClickedMarker
-
 
 markerObject = (latData, longData) ->
   {lat: latData, lng: longData}
