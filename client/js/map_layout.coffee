@@ -59,29 +59,26 @@ mapClick = ->
       lngData = mapClickedMarker.position.lng()
 
     google.maps.event.addListener mapClickInfoWindow, "domready", ->
+      imageId = null
+
       if (Meteor.isClient)
         Dropzone.autoDiscover = true
         new Dropzone "#content form#location-images.dropzone",
           accept: (file, done) ->
             Images.insert file, (err, fileObj) ->
-              console.log "Images.insert has been called"
               if err
                 console.log "Error exists: ", err
               else
-                fileId = fileObj._id
-                markerId = Markers.update._id
-                Meteor.markers.update markerId,
-                  $set:
-                    'location-image.imageId': fileId
+                imageId = fileObj._id
             done()
 
       $("#saveMarker").click ->
-        description = document.getElementById("description content").value
-        Markers.insert(markerObject(latData, lngData, description))
+        description = $("#content #description").val()
+        Markers.insert(markerObject(latData, lngData, description, imageId))
 
 
-markerObject = (latData, lngData, description, locationImage) ->
-  {lat: latData, lng: lngData, description: description, locationImage: fileId}
+markerObject = (latData, lngData, description, imageId) ->
+  {lat: latData, lng: lngData, description: description, imageId: imageId}
 
 autoLoadSavedMarkers = ->
   if (Meteor.isClient)
@@ -103,7 +100,6 @@ autoLoadSavedMarkers = ->
           map: map,
           icon : savedMarkerIcon,
           draggable: false,
-        console.log 'one new pin from DB has been made'
 
         google.maps.event.addListener savedMarker, "click", ->
           savedInfoWindow.open map, this
@@ -210,6 +206,3 @@ getUserEmail = ->
 
 Template.infoWindow.helpers
   locationImage:  ->
-    if Meteor.user()
-      imageId = Meteor.markers.imageId
-      locationImageUrl = Images.findOne(imageId).url()
