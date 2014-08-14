@@ -1,25 +1,25 @@
 Meteor.subscribe('markers')
+geocoder = undefined
 map = undefined
 mapClickedMarker = undefined
 savedMarker = undefined
 currentPosMarker = undefined
-pos = undefined
 geoMarkerIcon = '/images/paleblue_MarkerA.png'
 savedMarkerIcon = '/images/green_MarkerA.png'
 clickMarkerIcon = '/images/blue_MarkerA.png'
+currentFindMarker = undefined
+
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
-
   initializeMap()
   geolocation()
-
 
 initializeMap = ->
   geocoder = new google.maps.Geocoder()
   mapOptions =
     backgroundColor: "#AFBE48"
     zoom: 8
-    center: new google.maps.LatLng(-34.397, 150.644)
+    # center: new google.maps.LatLng(-34.397, 150.644)
     minZoom: 2
 
   mapDiv = document.getElementById("map-canvas")
@@ -27,6 +27,7 @@ initializeMap = ->
 
   autoLoadSavedMarkers()
   mapClick()
+  geolocation()
 
 infoWindowContent = (infoWindow, contentString) ->
   infoWindow.setContent(contentString)
@@ -87,8 +88,8 @@ autoLoadSavedMarkers = ->
             lat: latt,
             lng: long,
           map: map,
-          draggable:true,
           icon : savedMarkerIcon,
+          draggable: false,
         console.log 'one new pin from DB has been made'
 
         google.maps.event.addListener savedMarker, "click", ->
@@ -114,7 +115,6 @@ geolocation = ->
   else
     handleNoGeolocation false
 
-
 handleNoGeolocation = (errorFlag) ->
   if errorFlag
     content = "Error: The Geolocation service failed."
@@ -128,4 +128,29 @@ handleNoGeolocation = (errorFlag) ->
   map.setCenter options.position
   addMarker(position, map)
 
+geocoding = ->
+  Template.map.events
+    "click button#address" : (e, t) ->
+      address = document.getElementById("address").value
+      geocoder.geocode
+        address: address
+      , (results, status) ->
+        if status is google.maps.GeocoderStatus.OK
+          map.setCenter results[0].geometry.location
+          contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+          geocodingInfoWindow = new google.maps.InfoWindow(content: contentString)
+          currentFindMarker = new google.maps.Marker(
+            map: map
+            draggable:true,
+            position: results[0].geometry.location
+          )
 
+          google.maps.event.addListener currentFindMarker, "click", ->
+            geocodingInfoWindow.open map, currentFindMarker
+
+        else
+          alert "Geocode was not successful for the following reason: " + status
+
+      e.preventDefault()
+      false
+geocoding()
