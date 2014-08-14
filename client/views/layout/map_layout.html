@@ -24,42 +24,36 @@
 
 <template name="infoWindow">
   <div id="content_source" style="display: none;">
-    <form action="#" id="infoWindow_form">
-      <fieldset>
-        <legend>Location</legend>
-        <div class="form-group">
-          <label for="location">Location: </label>
-          <input type="text" id="location content" name="location" value="" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="description">Description</label>
-          <input type="textarea" id="description content" name="description" value="" class="form-control">
-        </div>
-        <div class="location-images">
-          <p>Images</p>
-        </div>
-      </fieldset>
-      <input id="content-send" type="submit" value="Send">
-    </form>
+    <div class="location">Location</div>
+      <div class="form-group">
+        <div class="description">Description:</div>
+        <input type="textarea" id="description content" name="description" value="" class="form-control">
+      </div>
+      <div class="location-images">
+        <p>Images</p>
+      </div>
     <button class="btn" id="saveMarker">Save Pin</button>
   </div>
-</template>
 
-<template name="infoWindowShow">
   <div id="content_sourceShow" style="display: none;">
-    {{#each allContent}}
-      {{> content}}
-    {{/each }}
+    <h1> HELLO!</h1>
+    <div class="test">
+
+    </div>
   </div>
+  <button class="btn" id="saveMarker">Save Pin</button>
 </template>
 
-<!-- <template name="content">
+<!-- <template name="infoWindowShow">
+</template>
+
+<template name="content">
   <div class="content">
     <div class="location">
-      {{ location }}
+
     </div>
     <div class="description">
-      {{ description }}
+
     </div>
     <div class="location-images">
       <p>Images</p>

@@ -8,8 +8,10 @@ geoMarkerIcon = '/images/paleblue_MarkerA.png'
 savedMarkerIcon = '/images/green_MarkerA.png'
 clickMarkerIcon = '/images/blue_MarkerA.png'
 currentFindMarker = undefined
+mapClickInfoWindow = undefined
 latData = undefined
 lngData = undefined
+
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
   initializeMap()
@@ -35,16 +37,13 @@ infoWindowContent = (infoWindow, contentString) ->
 
 mapClick = ->
   google.maps.event.addListener map, "click", (event) ->
-    console.log latt = event.latLng.lat()
-    console.log long = event.latLng.lng()
-    $("button#saveMarker").data("lat", latt)
-    $("button#saveMarker").data("long", long)
+    latt = event.latLng.lat()
+    long = event.latLng.lng()
     contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     mapClickInfoWindow = new google.maps.InfoWindow(content: contentString)
 
     infoWindowContent(mapClickInfoWindow, contentString)
 
-    console.log "hidden: " + $("button#saveMarker").data("lat")
     mapClickedMarker.setMap null if mapClickedMarker
     mapClickedMarker = new google.maps.Marker(
       position:
@@ -56,15 +55,12 @@ mapClick = ->
 
     google.maps.event.addListener mapClickedMarker, "click", ->
       mapClickInfoWindow.open map, mapClickedMarker
-      console.log latData = mapClickedMarker.position.lat()
-      console.log lngData = mapClickedMarker.position.lng()
+      latData = mapClickedMarker.position.lat()
+      lngData = mapClickedMarker.position.lng()
 
     google.maps.event.addListener mapClickInfoWindow, "domready", ->
       $("#saveMarker").click ->
-        console.log "ahah"
-        console.log latData
-        console.log lngData
-        console.log description = document.getElementById("description content").value
+        description = document.getElementById("description content").value
         Markers.insert(markerObject(latData, lngData, description))
 
 markerObject = (latData, lngData, description) ->
@@ -79,9 +75,11 @@ autoLoadSavedMarkers = ->
         console.log key
         latt = object.lat
         long = object.lng
+        description = object.description
         console.log latt
         console.log long
-        contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+        console.log description
+        contentString = "<div id=\"content\">" + $('#content_sourceShow').html() +  "</div>"
         savedInfoWindow = new google.maps.InfoWindow(content: contentString)
 
         infoWindowContent(savedInfoWindow, contentString)
@@ -97,6 +95,14 @@ autoLoadSavedMarkers = ->
 
         google.maps.event.addListener savedMarker, "click", ->
           savedInfoWindow.open map, this
+          latData = savedMarker.position.lat()
+          lngData = savedMarker.position.lng()
+          console.log "This is the lat: " + latData
+          console.log "this is the long: " + lngData
+
+        google.maps.event.addListener savedInfoWindow, "domready", ->
+          console.log object.description
+          $( "div.test" ).text( "#{description}" )
 
 geolocation = ->
   if navigator.geolocation
@@ -157,3 +163,41 @@ geocoding = ->
       e.preventDefault()
       false
 geocoding()
+
+reverseGeocoding = ->
+  input = document.getElementById("latlng").value
+  latlngStr = input.split(",", 2)
+  lat = parseFloat(latlngStr[0])
+  lng = parseFloat(latlngStr[1])
+  latlng = new google.maps.LatLng(lat, lng)
+  geocoder.geocode
+    latLng: latlng
+  , (results, status) ->
+    if status is google.maps.GeocoderStatus.OK
+      if results[1]
+        map.setZoom 11
+        marker = new google.maps.Marker(
+          position: latlng
+          map: map
+        )
+
+        google.maps.event.addListener currentPosMarker, "click", ->
+          geocodingInfoWindow.setContent results[1].formatted_address
+          geocodingInfoWindow.open map, marker
+      else
+        alert "No results found"
+    else
+      alert "Geocoder failed due to: " + status
+
+
+#Info Window Content
+getUserId = ->
+  Meteor.userId()
+
+getUserEmail = ->
+  Meteor.user().emails[0].address
+
+Template.infoWindowShow.helpers
+  allContent: ->
+    Content.find({})
+#Info Window Content end
