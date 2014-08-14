@@ -8,7 +8,8 @@ geoMarkerIcon = '/images/paleblue_MarkerA.png'
 savedMarkerIcon = '/images/green_MarkerA.png'
 clickMarkerIcon = '/images/blue_MarkerA.png'
 currentFindMarker = undefined
-
+latData = undefined
+lngData = undefined
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
   initializeMap()
@@ -50,22 +51,24 @@ mapClick = ->
         lat: latt,
         lng: long,
       map: map,
-      draggable: false
+      draggable: true
       icon : clickMarkerIcon)
 
     google.maps.event.addListener mapClickedMarker, "click", ->
       mapClickInfoWindow.open map, mapClickedMarker
+      console.log latData = mapClickedMarker.position.lat()
+      console.log lngData = mapClickedMarker.position.lng()
 
-markerObject = (latData, longData) ->
-  {lat: latData, lng: longData}
+    google.maps.event.addListener mapClickInfoWindow, "domready", ->
+      $("#saveMarker").click ->
+        console.log "ahah"
+        console.log latData
+        console.log lngData
+        console.log description = document.getElementById("description content").value
+        Markers.insert(markerObject(latData, lngData, description))
 
-saveMarkerToDatabase = ->
-  Template.editMarker.events
-    "click button#saveMarker" : (e, t) ->
-      console.log latData = $("button#saveMarker").data("lat")
-      console.log longData = $("button#saveMarker").data("long")
-      Markers.insert(markerObject(latData, longData))
-saveMarkerToDatabase()
+markerObject = (latData, lngData, description) ->
+  {lat: latData, lng: lngData, description: description}
 
 autoLoadSavedMarkers = ->
   if (Meteor.isClient)
