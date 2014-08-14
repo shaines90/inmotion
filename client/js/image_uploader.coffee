@@ -9,10 +9,6 @@ Template.profile.rendered = () ->
     Dropzone.autoDiscover = false
     new Dropzone "form#dropzone",
       accept: (file, done) ->
-        console.log "This is the file:"
-        console.log file
-        console.log "This is the event:"
-        console.log event
         FS.Utility.eachFile event, (file) ->
           Images.insert file, (err, fileObj) ->
             if err
