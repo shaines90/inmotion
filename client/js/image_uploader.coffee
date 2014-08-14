@@ -7,7 +7,7 @@ Template.profile.rendered = () ->
 
   if (Meteor.isClient)
     Dropzone.autoDiscover = false
-    $('.dropzone').dropzone
+    new Dropzone "form#dropzone",
       accept: (file, done) ->
         FS.Utility.eachFile event, (file) ->
           Images.insert file, (err, fileObj) ->
@@ -20,21 +20,3 @@ Template.profile.rendered = () ->
                 $set:
                   'profile.imageId': fileId
         done()
-
-
-# Template.infoWindow.rendered = () ->
-#   if (Meteor.isClient)
-#     Dropzone.autoDiscover = false
-#     $('.dropzone').dropzone
-#       accept: (file, done) ->
-#         FS.Utility.eachFile event, (file) ->
-#           Images.insert file, (err, fileObj) ->
-#             if err
-#               console.log "Error exists: ", err
-#             else
-#               fileId = fileObj._id
-#               userId = Meteor.userId()
-#               Meteor.users userId,
-#                 $set:
-#                   'location.imageId': fileId
-#         done()

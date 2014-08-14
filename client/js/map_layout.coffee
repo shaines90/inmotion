@@ -196,8 +196,4 @@ getUserId = ->
 
 getUserEmail = ->
   Meteor.user().emails[0].address
-
-Template.infoWindowShow.helpers
-  allContent: ->
-    Content.find({})
 #Info Window Content end
