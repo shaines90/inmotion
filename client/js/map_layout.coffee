@@ -50,7 +50,7 @@ mapClick = ->
         lat: latt,
         lng: long,
       map: map,
-      draggable: true
+      draggable: false,
       icon : clickMarkerIcon)
 
     google.maps.event.addListener mapClickedMarker, "click", ->
@@ -59,12 +59,30 @@ mapClick = ->
       lngData = mapClickedMarker.position.lng()
 
     google.maps.event.addListener mapClickInfoWindow, "domready", ->
+      if (Meteor.isClient)
+        Dropzone.autoDiscover = true
+        new Dropzone "#content form#location-images.dropzone",
+          accept: (file, done) ->
+            Images.insert file, (err, fileObj) ->
+              console.log "Images.insert has been called"
+              if err
+                console.log "Error exists: ", err
+              else
+                fileId = fileObj._id
+                console.log fileId
+                markerId = Markers.update._id
+                Meteor.markers.update markerId,
+                  $set:
+                    'location-image.imageId': fileId
+            done()
+
       $("#saveMarker").click ->
         description = document.getElementById("description content").value
         Markers.insert(markerObject(latData, lngData, description))
 
-markerObject = (latData, lngData, description) ->
-  {lat: latData, lng: lngData, description: description}
+
+markerObject = (latData, lngData, description, locationImage) ->
+  {lat: latData, lng: lngData, description: description, locationImage: fileId}
 
 autoLoadSavedMarkers = ->
   if (Meteor.isClient)
@@ -197,3 +215,10 @@ getUserId = ->
 getUserEmail = ->
   Meteor.user().emails[0].address
 #Info Window Content end
+
+
+Template.infoWindow.helpers
+  locationImage:  ->
+    if Meteor.user()
+      imageId = Meteor.markers.imageId
+      locationImageUrl = Images.findOne(imageId).url()

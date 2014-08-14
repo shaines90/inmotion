@@ -30,7 +30,9 @@
         <input type="textarea" id="description content" name="description" value="" class="form-control">
       </div>
       <div class="location-images">
-        <p>Images</p>
+        <form action="#" id="location-images" class="dropzone">
+          <div style="text-align: center; color: gray;"></div>
+        </form>
       </div>
     <button class="btn" id="saveMarker">Save Pin</button>
   </div>
@@ -38,8 +40,8 @@
   <div id="content_sourceShow" class="showContent" style="display: none;">
     <h1> Current Location </h1>
     <div class="test">
-
     </div>
+    <img class="location-image" src="{{locationImage}}">
   </div>
   <button class="btn" id="saveMarker">Save Pin</button>
 </template>
