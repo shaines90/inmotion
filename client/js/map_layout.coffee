@@ -4,14 +4,17 @@ map = undefined
 mapClickedMarker = undefined
 savedMarker = undefined
 currentPosMarker = undefined
+geoMarkerIcon = '/images/paleblue_MarkerA.png'
+savedMarkerIcon = '/images/green_MarkerA.png'
+clickMarkerIcon = '/images/blue_MarkerA.png'
 currentFindMarker = undefined
 
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
   initializeMap()
+  geolocation()
 
 initializeMap = ->
-  # geocoder = new google.maps.Geocoder()
   geocoder = new google.maps.Geocoder()
   mapOptions =
     backgroundColor: "#AFBE48"
@@ -47,7 +50,8 @@ mapClick = ->
         lat: latt,
         lng: long,
       map: map,
-      draggable: false)
+      draggable: false
+      icon : clickMarkerIcon)
 
     google.maps.event.addListener mapClickedMarker, "click", ->
       mapClickInfoWindow.open map, mapClickedMarker
@@ -84,6 +88,7 @@ autoLoadSavedMarkers = ->
             lat: latt,
             lng: long,
           map: map,
+          icon : savedMarkerIcon,
           draggable: false,
         console.log 'one new pin from DB has been made'
 
@@ -99,14 +104,14 @@ geolocation = ->
       currentPosMarker = new google.maps.Marker
         map: map,
         position: pos,
-        zoom: 8
+        zoom: 8,
+        icon : geoMarkerIcon,
 
       map.setCenter pos), ->
       handleNoGeolocation true
 
       google.maps.event.addListener currentPosMarker, "click", ->
         geolocationInfoWindow.open map, currentPosMarker
-
   else
     handleNoGeolocation false
 
