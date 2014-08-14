@@ -88,10 +88,7 @@ autoLoadSavedMarkers = ->
         latt = object.lat
         long = object.lng
         description = object.description
-        contentString = "<div id=\"content\">" + $('#content_sourceShow').html() +  "</div>"
-        savedInfoWindow = new google.maps.InfoWindow(content: contentString)
-
-        infoWindowContent(savedInfoWindow, contentString)
+        Session.set("(#{latt}, #{long})", object._id)
 
         savedMarker = new google.maps.Marker
           position:
@@ -101,13 +98,18 @@ autoLoadSavedMarkers = ->
           icon : savedMarkerIcon,
           draggable: false,
 
-        google.maps.event.addListener savedMarker, "click", ->
-          savedInfoWindow.open map, this
-          latData = savedMarker.position.lat()
-          lngData = savedMarker.position.lng()
+        google.maps.event.addListener savedMarker, "click", (event) ->
+          markerId = Session.get(event.latLng.toString())
 
-        google.maps.event.addListener savedInfoWindow, "domready", ->
-          $( "div.test" ).text( "#{description}" )
+          marker = Markers.findOne({_id: markerId})
+          if marker.imageId
+            imgUrl = Images.findOne({_id: marker.imageId}).url()
+            imageTag = "<img src='#{imgUrl}' />"
+          contentString = "<div id=\"content\">" + "<h1> Current Location </h1><div>#{marker.description}</div>" + imageTag + "</div>"
+          savedInfoWindow = new google.maps.InfoWindow(content: contentString)
+          infoWindowContent(savedInfoWindow, contentString)
+
+          savedInfoWindow.open map, this
 
 geolocation = ->
   if navigator.geolocation
