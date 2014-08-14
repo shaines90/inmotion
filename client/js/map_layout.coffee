@@ -69,7 +69,6 @@ mapClick = ->
                 console.log "Error exists: ", err
               else
                 fileId = fileObj._id
-                console.log fileId
                 markerId = Markers.update._id
                 Meteor.markers.update markerId,
                   $set:
@@ -88,15 +87,10 @@ autoLoadSavedMarkers = ->
   if (Meteor.isClient)
     Deps.autorun () ->
       array = Markers.find().fetch()
-      console.log Markers
       for key, object of array
-        console.log key
         latt = object.lat
         long = object.lng
         description = object.description
-        console.log latt
-        console.log long
-        console.log description
         contentString = "<div id=\"content\">" + $('#content_sourceShow').html() +  "</div>"
         savedInfoWindow = new google.maps.InfoWindow(content: contentString)
 
@@ -115,11 +109,8 @@ autoLoadSavedMarkers = ->
           savedInfoWindow.open map, this
           latData = savedMarker.position.lat()
           lngData = savedMarker.position.lng()
-          console.log "This is the lat: " + latData
-          console.log "this is the long: " + lngData
 
         google.maps.event.addListener savedInfoWindow, "domready", ->
-          console.log object.description
           $( "div.test" ).text( "#{description}" )
 
 geolocation = ->
