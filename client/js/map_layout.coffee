@@ -53,7 +53,6 @@ mapClick = ->
     , (results, status) ->
       if status is google.maps.GeocoderStatus.OK
        formatedAddress = results[1].formatted_address
-       console.log formatedAddress
       else
         alert "No land to pin on. Please try again."
 
@@ -63,6 +62,7 @@ mapClick = ->
     infoWindowContent(mapClickInfoWindow, contentString)
 
     mapClickedMarker.setMap null if mapClickedMarker
+    currentFindMarker.setMap null if currentFindMarker
     mapClickedMarker = new google.maps.Marker(
       position:
         lat: latt,
@@ -133,7 +133,7 @@ geolocation = ->
   if navigator.geolocation
     navigator.geolocation.getCurrentPosition ((position) ->
       pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-      contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
+      contentString = "<div id=\"content\">" + "$('#content_source').html()" +  "</div>"
       geolocationInfoWindow = new google.maps.InfoWindow(content: contentString)
       currentPosMarker = new google.maps.Marker
         map: map,
@@ -173,10 +173,13 @@ geocoding = ->
           map.setCenter results[0].geometry.location
           contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
           geocodingInfoWindow = new google.maps.InfoWindow(content: contentString)
+          currentFindMarker.setMap null if currentFindMarker
+          mapClickedMarker.setMap null if mapClickedMarker
           currentFindMarker = new google.maps.Marker(
             map: map
             draggable:true,
-            position: results[0].geometry.location
+            position: results[0].geometry.location,
+            icon : clickMarkerIcon,
           )
 
           google.maps.event.addListener currentFindMarker, "click", ->
@@ -202,8 +205,9 @@ reverseGeocoding = ->
       if results[1]
         map.setZoom 11
         marker = new google.maps.Marker(
-          position: latlng
-          map: map
+          position: latlng,
+          map: map,
+          icon : clickMarkerIcon,
         )
 
         google.maps.event.addListener currentPosMarker, "click", ->
