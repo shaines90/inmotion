@@ -1,36 +1,36 @@
 Meteor.subscribe('markers')
-geocoder = undefined
-map = undefined
-mapClickedMarker = undefined
-savedMarker = undefined
-currentPosMarker = undefined
-geoMarkerIcon = '/images/yellowMarker.png'
-savedMarkerIcon = '/images/greenMarker-01.png'
+
 clickMarkerIcon = '/images/blueMarker-01.png'
 currentFindMarker = undefined
-mapClickInfoWindow = undefined
+currentPosMarker = undefined
+geocoder = undefined
+geoMarkerIcon = '/images/yellowMarker.png'
 latData = undefined
 lngData = undefined
+map = undefined
+mapClickInfoWindow = undefined
+mapClickedMarker = undefined
+savedMarker = undefined
+savedMarkerIcon = '/images/greenMarker-01.png'
 
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
-  initializeMap()
   geolocation()
+  initializeMap()
 
 initializeMap = ->
   geocoder = new google.maps.Geocoder()
   mapOptions =
     backgroundColor: "#AFBE48"
     zoom: 8
-    # center: new google.maps.LatLng(-34.397, 150.644)
     minZoom: 2
 
   mapDiv = document.getElementById("map-canvas")
   map = new google.maps.Map(mapDiv, mapOptions)
 
   autoLoadSavedMarkers()
-  mapClick()
   geolocation()
+  mapClick()
 
 infoWindowContent = (infoWindow, contentString) ->
   infoWindow.setContent(contentString)
@@ -67,7 +67,7 @@ mapClick = ->
           accept: (file, done) ->
             Images.insert file, (err, fileObj) ->
               if err
-                console.log "Error exists: ", err
+                alert "Error exists: ", err
               else
                 imageId = fileObj._id
             done()
@@ -195,16 +195,3 @@ reverseGeocoding = ->
         alert "No results found"
     else
       alert "Geocoder failed due to: " + status
-
-
-#Info Window Content
-getUserId = ->
-  Meteor.userId()
-
-getUserEmail = ->
-  Meteor.user().emails[0].address
-#Info Window Content end
-
-
-Template.infoWindow.helpers
-  locationImage:  ->

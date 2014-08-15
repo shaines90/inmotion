@@ -1,10 +1,10 @@
 Template.profile.helpers
+  bio:           -> Meteor.user().profile.bio if Meteor.user()
   email:         -> Meteor.user().emails[0].address if Meteor.user() and Meteor.user().emails?
   firstName:     -> Meteor.user().profile.firstName if Meteor.user()
   lastName:      -> Meteor.user().profile.lastName if Meteor.user()
-  organization:  -> Meteor.user().profile.organization if Meteor.user()
   location:      -> Meteor.user().profile.location if Meteor.user()
-  bio:           -> Meteor.user().profile.bio if Meteor.user()
+  organization:  -> Meteor.user().profile.organization if Meteor.user()
   url:           -> Meteor.user().profile.url if Meteor.user()
   googlePlusUrl: -> Meteor.user().profile.googlePlusUrl if Meteor.user()
   twitterHandle: -> Meteor.user().profile.twitterHandle if Meteor.user()

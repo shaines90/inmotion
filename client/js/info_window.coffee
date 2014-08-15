@@ -1,2 +1,0 @@
-getUserId = ->
-  Meteor.userId()

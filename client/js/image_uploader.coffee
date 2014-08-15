@@ -12,7 +12,7 @@ Template.profile.rendered = () ->
         FS.Utility.eachFile event, (file) ->
           Images.insert file, (err, fileObj) ->
             if err
-              console.log "Error exists: ", err
+              alert "Error exists: ", err
             else
               fileId = fileObj._id
               userId = Meteor.userId()

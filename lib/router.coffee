@@ -14,7 +14,7 @@ Router.map ->
       Session.set('fromWhere', Router.current().path)
     onRun: ->
       if Meteor.userId()
-        Router.go AccountsEntry.settings.dashboardRoute
+        Router.go AccountsEntry.settings.mapRoute
 
       if AccountsEntry.settings.signInTemplate
         @template = AccountsEntry.settings.signInTemplate
