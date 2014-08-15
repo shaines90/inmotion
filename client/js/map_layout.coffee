@@ -1,5 +1,4 @@
 Meteor.subscribe('markers')
-
 clickMarkerIcon = '/images/blueMarker-01.png'
 currentFindMarker = undefined
 currentPosMarker = undefined
@@ -14,6 +13,9 @@ savedMarker = undefined
 savedMarkerIcon = '/images/greenMarker-01.png'
 formatedAddress = undefined
 address = undefined
+poly = undefined
+geolocationInfoWindow = undefined
+currentPosMarker = undefined
 
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
@@ -22,13 +24,21 @@ Template.map.rendered = ->
 
 initializeMap = ->
   geocoder = new google.maps.Geocoder()
+
   mapOptions =
     backgroundColor: "#AFBE48"
     zoom: 8
     minZoom: 2
-
   mapDiv = document.getElementById("map-canvas")
   map = new google.maps.Map(mapDiv, mapOptions)
+
+  polyOptions =
+      strokeColor: "#000000"
+      strokeOpacity: 1.0
+      strokeWeight: 3
+
+  poly = new google.maps.Polyline(polyOptions)
+  poly.setMap map
 
   autoLoadSavedMarkers()
   geolocation()
@@ -102,6 +112,9 @@ autoLoadSavedMarkers = ->
         description = object.description
         address = object.adress
         Session.set("(#{latt}, #{long})", object._id)
+        latlng = new google.maps.LatLng(latt, long)
+        path = poly.getPath()
+        path.push latlng
 
         savedMarker = new google.maps.Marker
           position:
@@ -135,11 +148,24 @@ geolocation = ->
         zoom: 8,
         icon : geoMarkerIcon,
 
+      google.maps.event.addListener currentPosMarker, "click", ->
+        geolocationInfoWindow.open map, currentPosMarker
+        latt = currentPosMarker.position.lat()
+        long = currentPosMarker.position.lng()
+        latlng = new google.maps.LatLng(latt, long)
+        geocoder.geocode
+          latLng: latlng
+        , (results, status) ->
+          if status is google.maps.GeocoderStatus.OK
+           formatedAddress = results[1].formatted_address
+           console.log formatedAddress
+          else
+            alert "Geocoder failed due to: " + status
+          $( "div.location" ).html("<h1>#{formatedAddress}</h1>")
+
       map.setCenter pos), ->
       handleNoGeolocation true
 
-      google.maps.event.addListener currentPosMarker, "click", ->
-        geolocationInfoWindow.open map, currentPosMarker
   else
     handleNoGeolocation false
 
@@ -175,7 +201,19 @@ geocoding = ->
 
           google.maps.event.addListener currentFindMarker, "click", ->
             geocodingInfoWindow.open map, currentFindMarker
+            latt = currentFindMarker.position.lat()
+            long = currentFindMarker.position.lng()
+            latlng = new google.maps.LatLng(latt, long)
+            geocoder.geocode
+              latLng: latlng
+            , (results, status) ->
+              if status is google.maps.GeocoderStatus.OK
+               formatedAddress = results[1].formatted_address
+               console.log formatedAddress
+              else
+                alert "Geocoder failed due to: " + status
 
+              $( "div.location" ).html("<h1>#{formatedAddress}</h1>")
         else
           alert "Geocode was not successful for the following reason: " + status
 
@@ -183,27 +221,4 @@ geocoding = ->
       false
 geocoding()
 
-reverseGeocoding = ->
-  input = document.getElementById("latlng").value
-  latlngStr = input.split(",", 2)
-  lat = parseFloat(latlngStr[0])
-  lng = parseFloat(latlngStr[1])
-  latlng = new google.maps.LatLng(lat, lng)
-  geocoder.geocode
-    latLng: latlng
-  , (results, status) ->
-    if status is google.maps.GeocoderStatus.OK
-      if results[1]
-        map.setZoom 11
-        marker = new google.maps.Marker(
-          position: latlng
-          map: map
-        )
 
-        google.maps.event.addListener currentPosMarker, "click", ->
-          geocodingInfoWindow.setContent results[1].formatted_address
-          geocodingInfoWindow.open map, marker
-      else
-        alert "No results found"
-    else
-      alert "Geocoder failed due to: " + status
