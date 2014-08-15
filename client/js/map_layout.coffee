@@ -29,7 +29,13 @@ initializeMap = ->
 
   mapDiv = document.getElementById("map-canvas")
   map = new google.maps.Map(mapDiv, mapOptions)
+  polyOptions =
+    strokeColor: "#000000"
+    strokeOpacity: 1.0
+    strokeWeight: 3
 
+  poly = new google.maps.Polyline(polyOptions)
+  poly.setMap map
   autoLoadSavedMarkers()
   geolocation()
   mapClick()
@@ -48,7 +54,7 @@ mapClick = ->
       if status is google.maps.GeocoderStatus.OK
        formatedAddress = results[1].formatted_address
       else
-        alert "Geocoder failed due to: " + status
+        alert "No land to pin on. Please try again."
 
     contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     mapClickInfoWindow = new google.maps.InfoWindow(content: contentString)
