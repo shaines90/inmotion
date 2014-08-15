@@ -11,7 +11,7 @@ currentFindMarker = undefined
 mapClickInfoWindow = undefined
 latData = undefined
 lngData = undefined
-
+formatedAddress = undefined
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
   initializeMap()
@@ -39,11 +39,22 @@ mapClick = ->
   google.maps.event.addListener map, "click", (event) ->
     latt = event.latLng.lat()
     long = event.latLng.lng()
+    lat = latt
+    lng = long
+    latlng = new google.maps.LatLng(lat, lng)
+    geocoder.geocode
+      latLng: latlng
+    , (results, status) ->
+      if status is google.maps.GeocoderStatus.OK
+       formatedAddress = results[1].formatted_address
+       console.log formatedAddress
+      else
+        alert "Geocoder failed due to: " + status
+
     contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     mapClickInfoWindow = new google.maps.InfoWindow(content: contentString)
 
     infoWindowContent(mapClickInfoWindow, contentString)
-
     mapClickedMarker.setMap null if mapClickedMarker
     mapClickedMarker = new google.maps.Marker(
       position:
@@ -60,6 +71,7 @@ mapClick = ->
 
     google.maps.event.addListener mapClickInfoWindow, "domready", ->
       imageId = null
+      $( "div.location" ).html("<h1>#{formatedAddress}</h1>")
 
       if (Meteor.isClient)
         Dropzone.autoDiscover = true
