@@ -12,6 +12,8 @@ mapClickInfoWindow = undefined
 mapClickedMarker = undefined
 savedMarker = undefined
 savedMarkerIcon = '/images/greenMarker-01.png'
+formatedAddress = undefined
+address = undefined
 
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
@@ -39,6 +41,16 @@ mapClick = ->
   google.maps.event.addListener map, "click", (event) ->
     latt = event.latLng.lat()
     long = event.latLng.lng()
+    latlng = new google.maps.LatLng(latt, long)
+    geocoder.geocode
+      latLng: latlng
+    , (results, status) ->
+      if status is google.maps.GeocoderStatus.OK
+       formatedAddress = results[1].formatted_address
+       console.log formatedAddress
+      else
+        alert "Geocoder failed due to: " + status
+
     contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
     mapClickInfoWindow = new google.maps.InfoWindow(content: contentString)
 
@@ -60,6 +72,7 @@ mapClick = ->
 
     google.maps.event.addListener mapClickInfoWindow, "domready", ->
       imageId = null
+      $( "div.location" ).html("<h1>#{formatedAddress}</h1>")
 
       if (Meteor.isClient)
         Dropzone.autoDiscover = true
@@ -74,11 +87,10 @@ mapClick = ->
 
       $("#saveMarker").click ->
         description = $("#content #description").val()
-        Markers.insert(markerObject(latData, lngData, description, imageId))
+        Markers.insert(markerObject(latData, lngData, description, imageId, formatedAddress))
 
-
-markerObject = (latData, lngData, description, imageId) ->
-  {lat: latData, lng: lngData, description: description, imageId: imageId}
+markerObject = (latData, lngData, description, imageId, formatedAddress) ->
+  {lat: latData, lng: lngData, description: description, imageId: imageId, address: formatedAddress}
 
 autoLoadSavedMarkers = ->
   if (Meteor.isClient)
@@ -88,6 +100,7 @@ autoLoadSavedMarkers = ->
         latt = object.lat
         long = object.lng
         description = object.description
+        address = object.adress
         Session.set("(#{latt}, #{long})", object._id)
 
         savedMarker = new google.maps.Marker
@@ -100,12 +113,11 @@ autoLoadSavedMarkers = ->
 
         google.maps.event.addListener savedMarker, "click", (event) ->
           markerId = Session.get(event.latLng.toString())
-
           marker = Markers.findOne({_id: markerId})
           if marker.imageId
             imgUrl = Images.findOne({_id: marker.imageId}).url()
             imageTag = "<img src='#{imgUrl}' />"
-          contentString = "<div id=\"content\">" + "<h1> Current Location </h1><div>#{marker.description}</div>" + imageTag + "</div>"
+          contentString = "<div id=\"content\">" + "<h1> #{marker.address} </h1><div>#{marker.description}</div>" + imageTag + "</div>"
           savedInfoWindow = new google.maps.InfoWindow(content: contentString)
           infoWindowContent(savedInfoWindow, contentString)
 
