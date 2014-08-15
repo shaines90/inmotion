@@ -40,9 +40,7 @@ mapClick = ->
   google.maps.event.addListener map, "click", (event) ->
     latt = event.latLng.lat()
     long = event.latLng.lng()
-    lat = latt
-    lng = long
-    latlng = new google.maps.LatLng(lat, lng)
+    latlng = new google.maps.LatLng(latt, long)
     geocoder.geocode
       latLng: latlng
     , (results, status) ->
