@@ -12,6 +12,7 @@ mapClickInfoWindow = undefined
 latData = undefined
 lngData = undefined
 formatedAddress = undefined
+address = undefined
 Template.map.rendered = ->
   google.maps.event.addDomListener(window, 'load', initializeMap);
   initializeMap()
@@ -55,6 +56,7 @@ mapClick = ->
     mapClickInfoWindow = new google.maps.InfoWindow(content: contentString)
 
     infoWindowContent(mapClickInfoWindow, contentString)
+
     mapClickedMarker.setMap null if mapClickedMarker
     mapClickedMarker = new google.maps.Marker(
       position:
@@ -86,11 +88,11 @@ mapClick = ->
 
       $("#saveMarker").click ->
         description = $("#content #description").val()
-        Markers.insert(markerObject(latData, lngData, description, imageId))
+        Markers.insert(markerObject(latData, lngData, description, imageId, formatedAddress))
 
 
-markerObject = (latData, lngData, description, imageId) ->
-  {lat: latData, lng: lngData, description: description, imageId: imageId}
+markerObject = (latData, lngData, description, imageId, formatedAddress) ->
+  {lat: latData, lng: lngData, description: description, imageId: imageId, address: formatedAddress}
 
 autoLoadSavedMarkers = ->
   if (Meteor.isClient)
@@ -100,6 +102,7 @@ autoLoadSavedMarkers = ->
         latt = object.lat
         long = object.lng
         description = object.description
+        address = object.adress
         Session.set("(#{latt}, #{long})", object._id)
 
         savedMarker = new google.maps.Marker
@@ -112,12 +115,11 @@ autoLoadSavedMarkers = ->
 
         google.maps.event.addListener savedMarker, "click", (event) ->
           markerId = Session.get(event.latLng.toString())
-
           marker = Markers.findOne({_id: markerId})
           if marker.imageId
             imgUrl = Images.findOne({_id: marker.imageId}).url()
             imageTag = "<img src='#{imgUrl}' />"
-          contentString = "<div id=\"content\">" + "<h1> Current Location </h1><div>#{marker.description}</div>" + imageTag + "</div>"
+          contentString = "<div id=\"content\">" + "<h1> #{marker.address} </h1><div>#{marker.description}</div>" + imageTag + "</div>"
           savedInfoWindow = new google.maps.InfoWindow(content: contentString)
           infoWindowContent(savedInfoWindow, contentString)
 
