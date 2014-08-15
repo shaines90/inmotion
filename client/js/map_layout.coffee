@@ -31,18 +31,16 @@ initializeMap = ->
     minZoom: 2
   mapDiv = document.getElementById("map-canvas")
   map = new google.maps.Map(mapDiv, mapOptions)
+
   polyOptions =
-    strokeColor: "#000000"
-    strokeOpacity: 1.0
+    strokeColor: "#84BB0F"
+    strokeOpacity: 0.7
     strokeWeight: 3
+    editable: true
 
   poly = new google.maps.Polyline(polyOptions)
   poly.setMap map
 
-  polyOptions =
-      strokeColor: "#000000"
-      strokeOpacity: 1.0
-      strokeWeight: 3
 
   autoLoadSavedMarkers()
   geolocation()
@@ -144,7 +142,7 @@ geolocation = ->
   if navigator.geolocation
     navigator.geolocation.getCurrentPosition ((position) ->
       pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-      contentString = "<div id=\"content\">" + "$('#content_source').html()" +  "</div>"
+      contentString = "<div id=\"content\">" + $('#content_source').html() +  "</div>"
       geolocationInfoWindow = new google.maps.InfoWindow(content: contentString)
       currentPosMarker = new google.maps.Marker
         map: map,
