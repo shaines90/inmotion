@@ -37,6 +37,7 @@ initializeMap = ->
     strokeOpacity: 0.7
     strokeWeight: 3
     editable: true
+    geodesic: true
 
   poly = new google.maps.Polyline(polyOptions)
   poly.setMap map
