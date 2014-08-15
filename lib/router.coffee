@@ -18,10 +18,6 @@ Router.map ->
 
       if AccountsEntry.settings.signInTemplate
         @template = AccountsEntry.settings.signInTemplate
-
-        # If the user has a custom template, and not using the helper, then
-        # maintain the package Javascript so that OpenGraph tags and share
-        # buttons still work.
         pkgRendered= Template.entrySignIn.rendered
         userRendered = Template[@template].rendered
 
@@ -44,10 +40,6 @@ Router.map ->
     onRun: ->
       if AccountsEntry.settings.signUpTemplate
         @template = AccountsEntry.settings.signUpTemplate
-
-        # If the user has a custom template, and not using the helper, then
-        # maintain the package Javascript so that OpenGraph tags and share
-        # buttons still work.
         pkgRendered= Template.entrySignUp.rendered
         userRendered = Template[@template].rendered
 
