@@ -42,7 +42,6 @@ initializeMap = ->
   poly = new google.maps.Polyline(polyOptions)
   poly.setMap map
 
-
   autoLoadSavedMarkers()
   geolocation()
   mapClick()
